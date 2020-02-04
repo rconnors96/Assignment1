@@ -1,4 +1,8 @@
-import jdk.jfr.StackTrace;
+//Ryan Connors
+//Rulx Sainlus
+//COMP399 Distributed Systems
+//WordCount project
+
 
 import java.io.*;
 import java.nio.file.*;
