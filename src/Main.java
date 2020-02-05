@@ -6,7 +6,7 @@
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
 
 public class Main {
 
@@ -14,15 +14,25 @@ public class Main {
         clearFile(); //clears data from results.txt
         File[] files = getFiles(); //generates the File objects representing the txt files
         Vector<Thread> threads = new Vector<>();
+        Semaphore sem = new Semaphore(1);
 
         for (File file : files) {
-            Runnable run = new FileThread(file);
+            Runnable run = new FileThread(file, sem);
             threads.addElement(new Thread(run));
         }
 
         for (Thread thread : threads) {
             thread.start();
         }
+
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+
 
     }
 
