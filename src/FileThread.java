@@ -61,12 +61,9 @@ public class FileThread implements Runnable {
         try (BufferedReader in = new BufferedReader(new FileReader(results))) {
             while ((line = in.readLine()) != null) {
                 String currentWord = "";
-                char[] word = new char[100];
-                line.getChars(0,-1, word,0);
-
-                for (char c : word) {
-                    if (c != ':') {
-                        currentWord += c;
+                for (int i = 0; i < line.length(); i++) {
+                    if (line.charAt(i) != ':') {
+                        currentWord += line.charAt(i);
                     }
                 }
                 wordsInFile.addElement(currentWord.toLowerCase());
