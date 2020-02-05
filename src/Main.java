@@ -7,19 +7,25 @@
 import java.io.*;
 import java.util.Collections;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Vector;
 
 public class Main {
 
+
     //Hashtable can be shared between multiple threads, HashMap can not.
     private static final Hashtable<String, Integer> wordHash = new Hashtable<>();
+
 
     public static void main(String []args) {
         File[] files = getFiles(); //generates the File objects representing the txt files
         countWords(listWords(files)); //obtains a Vector<String> of all the words in the files and passes it to be counted
 
-        System.out.print(wordHash.toString()); //displays the hash table for proof that it works
+        writeToFile();
+
+        //System.out.print(wordHash.toString()); //displays the hash table for proof that it works
     }
+
 
     /**Uses the txtFolder directory as a File object. It then returns a File[] containing the File object forms of each txt file
      *
@@ -29,6 +35,7 @@ public class Main {
         File txtFolder = new File(".\\txtFolder");
         return txtFolder.listFiles();
     }
+
 
     /**Prints the contents of each file in a File[]
      *
@@ -46,6 +53,7 @@ public class Main {
             }
         }
     }
+
 
     /**Adds every word individually to a Vector<String> to be counted in a different method
      *
@@ -82,6 +90,7 @@ public class Main {
         return words;
     }
 
+
     /**Counts the frequency at which each word appears
      *
      * @param words the Vector<String> containing all the words to be counted
@@ -99,5 +108,32 @@ public class Main {
             wordHash.put(current, Collections.frequency(words, current));
             //the word is put as the key in the wordsHash table, and the number of times found in the files is used as the value
         }
+    }
+
+    /**Writes the words and their count to a file using the format provided in the Assignment pdf
+     * Ex: (Word:2)...first letter capitalized
+     */
+    private static void writeToFile() {
+
+        Set<String> keys = wordHash.keySet(); //makes set of just the keys
+        File results = new File("results.txt"); //sets the result txt File object
+
+        //CLEARS the file of old data
+        try (PrintWriter clear = new PrintWriter(results)) {
+            clear.print("");
+        } catch(IOException ex) {
+            ex.printStackTrace();
+        }
+
+        //WRITES the data to the results file
+        try (BufferedWriter out = new BufferedWriter(new FileWriter(results, true))) {
+            for (String key : keys) {
+                out.write(key.substring(0,1).toUpperCase() + key.substring(1) + ":" + wordHash.get(key));
+                out.newLine();
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
     }
 }
