@@ -1,3 +1,9 @@
+//Ryan Connors
+//Rulx Sainlus
+//COMP399 Distributed Systems
+//FileThread for word count program
+
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
